@@ -22,9 +22,22 @@ var questions = [
       { answer: "30 years old", isTrue: false },
     ],
   },
+
+  {
+    question:"What will this code output?: var num = 10; \n console.log(typeof num);",
+    answers: [
+      {answer: "bool", isTrue:false},
+      {answer: "string", isTrue:false},
+      {answer: "undefined",isTrue:false},
+      {answer: "number", isTrue:true},
+    ],
+  },
+  
 ];
 
-console.log(questions[0].answers.length);
+
+
+
 
 startButton.addEventListener("click", function (event) {
   startButton.style.display = "none";
@@ -33,59 +46,90 @@ startButton.addEventListener("click", function (event) {
   startGame();
 });
 
+
+
+
+
 function startTime() {
   var timerInterval = setInterval(function () {
     time--;
     timer.textContent = time;
 
-    if (time === 0) {
+    if (time <= 0) {
       clearInterval(timerInterval);
-      startButton.style.display = "inline";
-      clearBtns();
-      questionNum = 0;
-      time = timenum;
-      questionTxt.textContent = "Game over time is up!";
-      startButton.textContent = "Restart";
+      gameOver();
     }
   }, 1000);
 }
 
+
+
+
+
 function startGame() {//this function get the question from the questions array and all the answers from the question array.
+  
   let startingP = document.querySelector("#mainP");
-  startingP.style.display = "none";
   let buttonAmount = questions[questionNum].answers.length;
   let answers = questions[questionNum].answers;
+  
   questionTxt.textContent = questions[questionNum].question;
+  startingP.style.display = "none";
 
   for (i = 0; i < buttonAmount; i++) {
     let isTrue = questions[questionNum].answers[i].isTrue;
     let button = document.createElement("button");
 
-    button.setAttribute("class", "quiz-button" + i);
-    button.setAttribute("id", isTrue);
-    head.appendChild(button);
-    button.textContent = answers[i].answer;
-    button.style.display = "flex";
-    button.addEventListener("click", function (event) {
+    button.setAttribute("class", "quiz-button" + i);//this is naming the buttons a class + i which allows me to loop through the html file and get rid of them afterwards
+    button.setAttribute("id", isTrue);//this is assigning an id to the buttons either true of false, to set the correct answer
+    head.appendChild(button);//this is appending the buttons to the head of the documents
+    button.textContent = answers[i].answer;//this is changing the text of the buttons to one of the answers provided to us by the answer array in the questions array
+    button.style.display = "flex";//this is setting the display type of all the buttons shown
+
+    button.addEventListener("click", function () {//this adds an event to the buttons that are being generated.
       let btnId = button.getAttribute("id");
-      clearBtns();
+      
       // console.log(btnId);
       if (btnId === "true") {
         console.log("Right answer!");
+        
+        clearBtns();
+       questionNum++
+       startGame();
       } else {
         console.log("Wrong answer");
+        clearBtns();
+        
+        question++
+        startGame();
+        
       }
     });
   }
-  questionNum++
 }
 
 
 function clearBtns(){//this function clears the question buttons.
-  for ( i = 0; i < 4; i++){
+  let ansArray = questions[questionNum].answers;
+  for ( i = 0; i < ansArray.length; i++){
   let quizBtn = document.querySelector(".quiz-button"+i);
-  quizBtn.style.display = "none";
+  quizBtn.remove();
   }
+}
+
+
+
+function gameOver(){
+  if (time <= 0){
+    questionTxt.textContent = "Game over time is up!";
+    startButton.textContent = "Restart";
+  }else {
+    questionTxt.textContent = "You have finished the game with a score of:";
+  }
+      startButton.style.display = "inline";
+      clearBtns();
+      questionNum = 0;
+      time = 10;
+      
 }
 
       
