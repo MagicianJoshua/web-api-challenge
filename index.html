@@ -7,14 +7,25 @@
     <link rel="stylesheet" href="Assets/style.css">
 </head>
 <body>
+    <div >
+        <h2 class="score">Score: 0</h2>
+    </div>
+    <div>
     <header class="mainhead">
         <h1 class="questionText">Welcome to the javascript quiz!</h1>
         <p id="mainP">Press start to begin the quiz!</p>
         <button class="startButton">Start</button>
     </header>
+    <form class="initialForm" style="display:none; justify-content:center; align-items: center; flex-direction:column;" >
+        <h2 class="h2Initial">Put your initials in to save your highscore!</h2>
+        <label  for="name">Initials </label>
+        <input class="initials" style="width:100px"type="text" id="name" name="name" >
+        <input class="submit" type="submit" value="submit">
+    </form>
     <section class="timer">
         <h2>0</h2>
     </section>
+</div>
 
 
     <script src="Assets/script.js"></script>
