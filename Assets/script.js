@@ -1,22 +1,25 @@
+
+
+var gameover = false;
 var timer = document.querySelector(".timer");
+var resetButton = document.querySelector(".resetButton");
 var head = document.querySelector(".mainhead");
 var startButton = document.querySelector(".startButton");
 var questionTxt = document.querySelector(".questionText");
-var highscoreTxt = document.querySelector(".initialForm");
+var initialForm = document.querySelector(".initialForm");
+var highscoretxt = document.querySelector(".Highscore")
 var initials = document.querySelector(".initials");
 var initSubmit = document.querySelector(".submit");
 var initH2 = document.querySelector(".h2Initial")
 var scoreTxt = document.querySelector(".score");
 var button = document.createElement("button");
-var highScore = localStorage.getItem("highScore");
-var gameDone = false;
-
-
+var highScoreNum = localStorage.getItem("highScore");
+var initialsLocal = localStorage.getItem("initials");
 var score = 0;
-var timenum = 10;
-var time = timenum;
-var amountOfButtons = 5;
+var time = 0;
 var questionNum = 0;
+highscoretxt.textContent = "HighScore: " + initialsLocal + " : " + highScoreNum;
+
 
 // this array will hold objects of question and answers so that one index in the questions array can hold multiple answers.
 var questions = [
@@ -40,9 +43,63 @@ var questions = [
       { answer: "number", isTrue: true },
     ],
   },
+  {
+    question:
+      "What is javascript main purpose in todays industry?",
+    answers: [
+      { answer: "Cyber Security", isTrue: false },
+      { answer: "Storing data", isTrue: false },
+      { answer: "Manipulating websites", isTrue: true },
+      { answer: "Making games", isTrue: false },
+    ],
+  },
+  {
+    question:
+      "What is the comparison operator to check if a var is equal to another var",
+    answers: [
+      { answer: "===", isTrue: true },
+      { answer: "!=", isTrue: false },
+      { answer: "=", isTrue: false },
+      { answer: "==", isTrue: false },
+    ],
+  },
+  {
+    question:
+      "Is javascript dynamically typed or statically typed?",
+    answers: [
+      { answer: "static", isTrue: false },
+      { answer: "dynamic", isTrue: true },
+    ],
+  },
+  {
+    question:
+      "How do you create a for loop?",
+    answers: [
+      { answer: "for (i = 0; i > 10; i++", isTrue: false },
+      { answer: "for (i = 0; i < 10; i++", isTrue: true },
+      { answer: "for (i = 0; i > 10; i--", isTrue: false },
+    ],
+  },
 ];
 
+
+
+resetButton.addEventListener("click", function(){
+  localStorage.setItem("highScore", 0);
+  localStorage.setItem("initials", "")
+  highScoreNum = localStorage.getItem("highScore");
+  initialsLocal = localStorage.getItem("initials");
+  highscoretxt.textContent = "HighScore: " + initialsLocal + " : " + highScoreNum;
+})
+
 startButton.addEventListener("click", function (event) {
+  highScoreNum = localStorage.getItem("highScore");
+  initialsLocal = localStorage.getItem("initials");
+  highscoretxt.textContent = "HighScore: " + initialsLocal + " : " + highScoreNum;
+  gameover = false;
+  score = 0;
+  time = 10;
+  resetButton.style.display = "none";
   startButton.style.display = "none";
   timer.textContent = time;
   startTime();
@@ -51,9 +108,22 @@ startButton.addEventListener("click", function (event) {
 
 initSubmit.addEventListener("click", function(event){
   event.preventDefault();
-  initH2.textContent = "Thank you for submitting you initials!";
-
-  console.log(initials.value + score);
+  console.log(initials.value);
+  initSubmit.style.display = "none";
+  startButton.style.display = "flex";
+  startButton.textContent = "Play again";
+  initialForm.style.display = "none";
+  resetButton.style.display = "flex";
+  highscoretxt.textContent = "HighScore: " + initialsLocal + ":" + highScoreNum;
+  questionTxt.textContent = "Thank you for submitting you initials!";
+  if (score > highScoreNum){
+    localStorage.setItem("highScore", score);
+    highscoretxt.textContent = "Highscore: "+highScoreNum;
+    localStorage.setItem("initials", initials.value);
+  }
+  highScoreNum = localStorage.getItem("highScore");
+  initialsLocal = localStorage.getItem("initials");
+  highscoretxt.textContent = "HighScore: " + initialsLocal + " : " + highScoreNum;
 })
 
 function startTime() {
@@ -62,12 +132,10 @@ function startTime() {
     time--;
     timer.textContent = time;
 
-    if (time <= 0) {
+    if (time <= 0 || gameover === true) {
       clearInterval(timerInterval);
       timeup = true
       gameOver();
-    }
-    if (timeup === true && gameDone != true){// did this if statement because it was throwing an error about there being no buttons to remove when the game was finished.
       clearBtns();
     }
     console.log(time);
@@ -95,6 +163,7 @@ function startGame() {
       button.style.background = "blue";
       button.style.fontWeight = "bolder";
       button.style.borderRadius = "10px"
+      button.style.justifyContent = "center"
 
 
       button.addEventListener("click", function () {
@@ -105,7 +174,7 @@ function startGame() {
 
         if (btnId === "true") {
           console.log("Right answer!");
-          score = score + 5 * time;
+          score = score + 10 * time;
           time = time + 5;
           timer.textContent = time;
           clearBtns();
@@ -139,12 +208,9 @@ function gameOver() {
   questionTxt.textContent =
   "You have finished the game with a score of: " + score;
   timer.remove();
-  if (score > highScore) {
-    localStorage.setItem("highScore", score);
-  }
   questionNum = 0;
-  highscoreTxt.style.display = "flex";
-  gameDone = true;
+  initialForm.style.display = "flex";
+  initSubmit.style.display = "flex";
+  gameover = true;
 }
-
 
