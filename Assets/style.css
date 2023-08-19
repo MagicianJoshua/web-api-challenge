@@ -31,3 +31,19 @@ button {
     position: relative;
     right:2px;
 }
+
+.initialForm * {
+    margin-top: 5px;
+}
+
+.submit {
+    background-color: blue;
+    color:white;
+    border-radius:10px;
+}
+
+.startButton {
+    background-color: blue;
+    color:white;
+    border-radius:10px;
+}
