@@ -90,9 +90,11 @@ resetButton.addEventListener("click", function(){
   highScoreNum = localStorage.getItem("highScore");
   initialsLocal = localStorage.getItem("initials");
   highscoretxt.textContent = "HighScore: " + initialsLocal + " : " + highScoreNum;
+  
 })
 
 startButton.addEventListener("click", function (event) {
+  timer.style.display = "flex";
   highScoreNum = localStorage.getItem("highScore");
   initialsLocal = localStorage.getItem("initials");
   highscoretxt.textContent = "HighScore: " + initialsLocal + " : " + highScoreNum;
@@ -207,7 +209,7 @@ function clearBtns() {
 function gameOver() {
   questionTxt.textContent =
   "You have finished the game with a score of: " + score;
-  timer.remove();
+  timer.style.display = "none";
   questionNum = 0;
   initialForm.style.display = "flex";
   initSubmit.style.display = "flex";
